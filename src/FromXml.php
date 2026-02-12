@@ -57,7 +57,7 @@ class FromXml
      * @param  DOMNode|null  $node
      * @return array<string, mixed>|string
      */
-    public function domNodeToArray(
+    protected function domNodeToArray(
         ?DOMNode $node
     ): array|string {
         if (empty($node)) {
