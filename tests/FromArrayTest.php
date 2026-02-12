@@ -1,24 +1,17 @@
 <?php
 
-namespace Dmb\XmlConverter\Tests;
+declare(strict_types=1);
 
 use Dmb\XmlConverter\FromArray;
-use Dmb\XmlConverter\Tests\TestCase;
+use Dmb\XmlConverter\Tests\Assets\Array\ValidArray;
 
-class FromArrayTest extends TestCase
-{
-    /** @test */
-    public function it_converted_to_xml()
-    {
-        $convertedArray = (new FromArray())
-            ->convertToXml(
-                $this->expectedArray(),
-                'envelope'
-            );
-
-        $this->assertEquals(
-            simplexml_load_string($this->getValidXml()),
-            simplexml_load_string($convertedArray)
+it('converts array to xml', function () {
+    $convertedArray = FromArray::make()
+        ->convertToXml(
+            (new ValidArray())->get(),
+            'envelope'
         );
-    }
-}
+
+    expect(simplexml_load_string($convertedArray))
+        ->toEqual(simplexml_load_string(getValidXmlForArray()));
+});

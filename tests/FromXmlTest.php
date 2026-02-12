@@ -2,49 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Dmb\XmlConverter\Tests;
-
 use Dmb\XmlConverter\FromXml;
-use Dmb\XmlConverter\XmlParsingExcpetion;
+use Dmb\XmlConverter\Tests\Assets\Xml\ValidArray;
+use Dmb\XmlConverter\XmlParsingException;
 
-class FromXmlTest extends TestCase
-{
-    /** @test */
-    public function it_converted_to_a_valid_array()
-    {
-        try {
-            $converted = (new FromXml())
-                ->convertToArray($this->getValidXml());
-        } catch (XmlParsingExcpetion $e) {
-            $error = $e->getMessage();
-        }
+it('converts xml to a valid array', function () {
+    $converted = FromXml::make()
+        ->convertToArray(getValidXmlForXml());
 
-        $this->assertTrue(is_array($converted));
-    }
+    expect($converted)->toBeArray();
+});
 
-    /** @test */
-    public function it_throws_a_parsing_exception_if_xml_is_not_valid()
-    {
-        try {
-            $convertedXml = (new FromXml())
-                ->convertToArray($this->getInvalidXml());
-        } catch (XmlParsingExcpetion $e) {
-            $error = $e->getMessage();
-        }
+it('throws a parsing exception if xml is not valid', function () {
+    FromXml::make()->convertToArray(getInvalidXmlForXml());
+})->throws(XmlParsingException::class, PARSING_XML_ERROR);
 
-        $this->assertEquals($error, self::PARSING_XML_ERROR);
-    }
+it('converts xml to the expected array', function () {
+    $convertedXml = FromXml::make()
+        ->convertToArray(getValidXmlForXml());
 
-    /** @test */
-    public function it_converted_to_the_expected_array()
-    {
-        try {
-            $convertedXml = (new FromXml())
-                ->convertToArray($this->getValidXml());
-        } catch (XmlParsingExcpetion $e) {
-            $error = $e->getMessage();
-        }
-
-        $this->assertEquals($this->expectedArray(), $convertedXml);
-    }
-}
+    expect($convertedXml)->toEqual((new ValidArray())->get());
+});

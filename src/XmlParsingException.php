@@ -7,12 +7,12 @@ namespace Dmb\XmlConverter;
 use Exception;
 use Throwable;
 
-class XmlParsingExcpetion extends Exception
+class XmlParsingException extends Exception
 {
     public function __construct(
         string $message = "Parsing error: it seems that the xml file is invalid, please check and try again",
         int $code = 500,
-        Throwable $previous = null
+        null|Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
     }

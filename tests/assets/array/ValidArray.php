@@ -1,10 +1,12 @@
 <?php
 
-namespace Dmb\XmlConverter\Tests\Assets;
+declare(strict_types=1);
 
-class ArrayExample
+namespace Dmb\XmlConverter\Tests\Assets\Array;
+
+class ValidArray
 {
-    public function get()
+    public function get(): array
     {
         return [
             'header' => [
