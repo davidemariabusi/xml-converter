@@ -15,13 +15,13 @@ class ValidArray
                         'SOAP-ENV:Body' => [
                             '_children' => [
                                 [
-                                    'ota:OTA_TourActivitySearchRS' => [
+                                    'ParentTag' => [
                                         '_children' => [
                                             [
-                                                'ota:Success' => [
+                                                'Success' => [
                                                     '_children' => [
                                                         [
-                                                            'ota:Foo' => [],
+                                                            'Foo' => [],
                                                         ],
                                                     ],
                                                     '_attributes' => [
@@ -34,19 +34,18 @@ class ValidArray
                                             'Version' => '1.0',
                                             'Target' => 'Test',
                                             'TimeStamp' => '2026-02-11T14:34:49+00:00',
-                                            'PrimaryLangID' => 'en',
-                                            'CorrelationID' => '698c938849ec86.73684605',
+                                            'PrimaryLangID' => 'en'
                                         ],
                                     ],
                                 ],
                                 [
-                                    'ota:OTA_TourActivitySearchRS' => [
+                                    'ParentTag' => [
                                         '_children' => [
                                             [
-                                                'ota:Success' => [
+                                                'Success' => [
                                                     '_children' => [
                                                         [
-                                                            'ota:Bar' => [],
+                                                            'Bar' => [],
                                                         ],
                                                     ],
                                                     '_attributes' => [
@@ -55,18 +54,17 @@ class ValidArray
                                                 ],
                                             ],
                                             [
-                                                'ota:Success' => [
+                                                'Success' => [
                                                     '_children' => [
                                                         [
-                                                            'ota:Fii' => [],
+                                                            'Fii' => [],
                                                         ],
                                                     ],
                                                     '_attributes' => [
                                                         'Version' => '1.6',
                                                         'Target' => 'Test',
                                                         'TimeStamp' => '2026-02-11T14:34:49+00:00',
-                                                        'PrimaryLangID' => 'en',
-                                                        'CorrelationID' => '698c938849ec86.73684605',
+                                                        'PrimaryLangID' => 'en'
                                                     ],
                                                 ],
                                             ],
@@ -75,8 +73,7 @@ class ValidArray
                                             'Version' => '1.0',
                                             'Target' => 'Test',
                                             'TimeStamp' => '2026-02-11T14:34:49+00:00',
-                                            'PrimaryLangID' => 'en',
-                                            'CorrelationID' => '698c938849ec86.73684605',
+                                            'PrimaryLangID' => 'en'
                                         ],
                                     ],
                                 ],
