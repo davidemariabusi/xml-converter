@@ -1,152 +1,188 @@
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
+# XML Converter
 
-# Xml Converter - convert from xml to array and viceversa
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dmb/xml-converter.svg?style=flat-square)](https://packagist.org/packages/dmb/xml-converter)
----
-A package that allows you to easily convert your XML string into array format or generate an XML string from an array. This package is based on: [Spatie Array to XML](https://github.com/spatie/array-to-xml) and [Gaarf XML string to PHP array](https://github.com/gaarf/XML-string-to-PHP-array).
----
-<br>
+
+Convert XML to array, convert array to XML, and navigate parsed XML with a fluent API.
+
+## Requirements
+
+- PHP `^8.2`
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require dmb/xml-converter
 ```
-<br>
 
-## From Array to XML
-<br>
-Below some examples of use.
-<br><br>
+## What this package does
 
-### Default root name: root
+- **`FromXml`**: converts an XML string into a normalized array structure.
+- **`FromArray`**: converts a compatible array structure into XML.
+- **`Fluent`**: provides safe, chainable navigation and collection-style helpers on parsed XML arrays.
+
+## Array structure used by the package
+
+The package uses a consistent structure:
+
+- `'_attributes'` for XML attributes
+- `'_value'` for text content
+- `'_children'` for ordered/repeated child nodes
+
+Example:
 
 ```php
-$arrayConverted = (new FromArray())
-    ->convertToXml($arrayToConvert);
+[
+    'ParentTag' => [
+        '_attributes' => [
+            'Version' => '1.0',
+        ],
+        '_children' => [
+            [
+                'Success' => [
+                    '_attributes' => ['Version' => '1.4'],
+                    '_children' => [
+                        ['Foo' => []],
+                    ],
+                ],
+            ],
+        ],
+    ],
+]
 ```
-<br>
 
-### Custom root name: customRootName
+## Usage
+
+### 1) XML to array
+
 ```php
-$arrayConverted = (new FromArray())
-    ->convertToXml(
-        $arrayToConvert,
-        'customRootName'
-    );
+use Dmb\XmlConverter\FromXml;
+use Dmb\XmlConverter\XmlParsingException;
+
+$xml = <<<'XML'
+<SOAP-ENV:Envelope Version="1.0">
+  <SOAP-ENV:Body>
+    <ParentTag Version="1.0" Target="Test">
+      <Success Version="1.4"><Foo/></Success>
+    </ParentTag>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+XML;
+
+try {
+    $array = FromXml::make()->convertToArray($xml);
+} catch (XmlParsingException $e) {
+    $error = $e->getMessage();
+}
 ```
-<br>
 
-### Custom root name: customRootName and attributes
+Notes:
+
+- `convertToArray()` returns an array with the XML root element as top-level key.
+- If XML is invalid, it throws `XmlParsingException`.
+
+### 2) Array to XML
+
 ```php
-$arrayConverted = (new FromArray())
-    ->convertToXml(
-        $arrayToConvert,
-        [
-        'rootElementName' => 'customRootName',
+use Dmb\XmlConverter\FromArray;
+
+$payload = [
+    'header' => [
+        'version' => [
+            '_attributes' => ['port' => '0000', 'host' => 'host'],
+            '_value' => '1.0.0',
+        ],
+        'timestamp' => '20230116170354',
+    ],
+    'response' => [
+        '_attributes' => ['type' => 'type', 'product' => 'item'],
+        '_children' => [
+            ['search' => ['_attributes' => ['number' => '123', 'time' => '0.00']]],
+            ['nights' => ['_attributes' => ['number' => '11']]],
+        ],
+    ],
+];
+
+// Default root element (library default)
+$xmlDefaultRoot = FromArray::make()->convertToXml($payload);
+
+// Custom root element
+$xmlCustomRoot = FromArray::make()->convertToXml($payload, 'envelope');
+
+// Custom root element with attributes
+$xmlCustomRootWithAttributes = FromArray::make()->convertToXml(
+    $payload,
+    [
+        'rootElementName' => 'envelope',
         '_attributes' => [
             'xmlns' => 'https://github.com/davidemariabusi/xml-converter',
         ],
-    );
-```
-<br>
-
-### Example with all features
-```php
-$arrayToConvert = [
-    'First_User' => [
-        '_attributes' => [
-            'attr1' => 'value'
-        ],
-        'name' => 'Name',
-    ],
-    'Second_User' => [
-        'name' => 'Name 2'
-    ],
-    'Third_User' => [
-        '_attributes' => [
-            'attr2' => 'value 2'
-        ],
-        '_value' => 'Name 3'
     ]
+);
+```
+
+### 3) Fluent navigation API
+
+```php
+use Dmb\XmlConverter\Fluent;
+use Dmb\XmlConverter\FluentException;
+
+$data = [
+    'SOAP-ENV:Envelope' => [
+        '_attributes' => ['Version' => '1.0'],
+        '_children' => [
+            [
+                'SOAP-ENV:Body' => [
+                    '_children' => [
+                        [
+                            'ParentTag' => [
+                                '_attributes' => ['Target' => 'Test'],
+                                '_children' => [
+                                    ['Success' => ['_attributes' => ['Version' => '1.4']]],
+                                    ['Success' => ['_attributes' => ['Version' => '1.5']]],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];
 
-$arrayConverted = (new FromArray())
-    ->convertToXml(
-        $arrayToConvert,
-        [
-            'rootElementName' => 'customRootName',
-            '_attributes' => [
-                'xmlns' => 'https://github.com/davidemariabusi/xml-converter',
-            ],
-        ]
-    );
-```
-### Result
-```xml
-<?xml version="1.0"?>
-<customRootName xmlns="https://github.com/davidemariabusi/xml-converter">
-    <First_User attr1="value">
-        <name>Name</name>
-        <weapon>Lightsaber</weapon>
-    </First User>
-    <Second_User>
-        <name>Name2</name>
-    </Second_User>
-    <Third_User attr2="value 2">
-        Name 3
-    </Third_User>
-</customRootName>
-```
-<br>
-
-## From XML to Array
-<br>
-Below some examples of use.
-<br><br>
-
-### With valid XML
-
-The xml will be converted to array.
-
-```php
 try {
-    $converted = (new FromXml())
-        ->convertToArray($validXml);
-} catch (XmlParsingExcpetion $e) {
+    $parentTag = Fluent::make($data)
+        ->getRoot('SOAP-ENV:Envelope')
+        ->getChild('SOAP-ENV:Body')
+        ->getChild('ParentTag');
+
+    $target = $parentTag->getAttribute('Target'); // "Test"
+
+    $versions = $parentTag
+        ->getChildren()
+        ->filter(fn (Fluent $item, int|string $key, ?string $tag): bool => $tag === 'Success')
+        ->pluck('Version'); // ['1.4', '1.5']
+} catch (FluentException $e) {
     $error = $e->getMessage();
 }
 ```
 
-### With invalid XML
+Useful `Fluent` methods:
 
-An XmlParsingExcpetion will be caught.
-```php
-try {
-    $converted = (new FromXml())
-        ->convertToArray($invalidXML);
-} catch (XmlParsingExcpetion $e) {
-    $error = $e->getMessage();
-}
-```
-<br>
+- Navigation: `getRoot()`, `getChild()`, `getChildren()`, `getAttributes()`
+- Value/metadata: `getValue()`, `toString()`, `hasChildren()`, `hasAttributes()`, `hasValue()`
+- Collections: `each()`, `map()`, `filter()`, `first()`, `last()`, `at()`, `nth()`, `second()` ... `tenth()`
+- Query helpers: `pluck()`, `contains()`, `count()`, `toArray()`, `isEmpty()`, `isNotEmpty()`
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-<br><br>
+See [CHANGELOG](CHANGELOG.md).
 
 ## Credits
 
 - [Davide Maria Busi](https://github.com/davidemariabusi)
-- [Spatie Array to XML](https://github.com/spatie/array-to-xml)
-- [Gaarf XML string to PHP array](https://github.com/gaarf/XML-string-to-PHP-array)
-<br><br>
-
+- [spatie/array-to-xml](https://github.com/spatie/array-to-xml)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+This project is released under the MIT License. See [LICENSE.md](LICENSE.md).

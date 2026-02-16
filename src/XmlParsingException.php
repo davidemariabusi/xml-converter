@@ -7,6 +7,14 @@ namespace Dmb\XmlConverter;
 use Exception;
 use Throwable;
 
+/**
+ * Class XmlParsingException
+ *
+ * @package Dmb\XmlConverter
+ * @author Davide Mariabusi <davidemaria.busi@gmail.com>
+ * @license MIT
+ * @link https://github.com/davidemariabusi/xml-converter
+ */
 class XmlParsingException extends Exception
 {
     public function __construct(

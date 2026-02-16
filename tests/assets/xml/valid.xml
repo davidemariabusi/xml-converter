@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ota="http://www.opentravel.org/OTA/2003/05" Version="1.0">
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" Version="1.0">
   <SOAP-ENV:Body>
-    <ota:OTA_TourActivitySearchRS Version="1.0" Target="Test" TimeStamp="2026-02-11T14:34:49+00:00" PrimaryLangID="en" CorrelationID="698c938849ec86.73684605">
-        <ota:Success Version="1.4">
-            <ota:Foo/>
-        </ota:Success>
-    </ota:OTA_TourActivitySearchRS>
-    <ota:OTA_TourActivitySearchRS Version="1.0" Target="Test" TimeStamp="2026-02-11T14:34:49+00:00" PrimaryLangID="en" CorrelationID="698c938849ec86.73684605">
-        <ota:Success Version="1.5">
-            <ota:Bar/>
-        </ota:Success>
-        <ota:Success Version="1.6" Target="Test" TimeStamp="2026-02-11T14:34:49+00:00" PrimaryLangID="en" CorrelationID="698c938849ec86.73684605">
-            <ota:Fii/>
-        </ota:Success>
-    </ota:OTA_TourActivitySearchRS>
+    <ParentTag Version="1.0" Target="Test" TimeStamp="2026-02-11T14:34:49+00:00" PrimaryLangID="en">
+        <Success Version="1.4">
+            <Foo/>
+        </Success>
+    </ParentTag>
+    <ParentTag Version="1.0" Target="Test" TimeStamp="2026-02-11T14:34:49+00:00" PrimaryLangID="en">
+        <Success Version="1.5">
+            <Bar/>
+        </Success>
+        <Success Version="1.6" Target="Test" TimeStamp="2026-02-11T14:34:49+00:00" PrimaryLangID="en">
+            <Fii/>
+        </Success>
+    </ParentTag>
   </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
